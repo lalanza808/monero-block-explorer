@@ -1,0 +1,17 @@
+[package]
+name = "monero-blockchain-explorer"
+version = "0.1.0"
+authors = ["lalanza808 <lance@reciprocitylabs.com>"]
+edition = "2018"
+description = ""
+
+# https://doc.rust-lang.org/cargo/reference/manifest.html
+
+
+[dependencies]
+rocket = "0.4.4"
+rocket_contrib = "0.4.4"
+serde = "1.0"
+serde_json = "1.0"
+serde_derive = "1.0"
+reqwest = { version = "0.10.4", features = ["blocking", "json"] }
