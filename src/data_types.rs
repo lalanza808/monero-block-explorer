@@ -2,7 +2,8 @@
 pub struct RPCPayload {
     pub jsonrpc: String,
     pub id: String,
-    pub method: String
+    pub method: String,
+    pub params: Option<RPCParams>
 }
 
 impl Default for RPCPayload {
@@ -10,7 +11,23 @@ impl Default for RPCPayload {
         RPCPayload {
             jsonrpc: "2.0".to_string(),
             id: "0".to_string(),
-            method: "get_info".to_string()
+            method: "get_info".to_string(),
+            params: None,
+        }
+    }
+}
+
+#[derive(Serialize, Deserialize)]
+pub struct RPCParams {
+    pub hash: Option<String>,
+    pub txs_hashes: Option<Vec<String>>
+}
+
+impl Default for RPCParams {
+    fn default() -> RPCParams {
+        RPCParams {
+            hash: None,
+            txs_hashes: None
         }
     }
 }
@@ -94,4 +111,25 @@ pub struct BlockHeader {
     pub prev_hash: String,
     pub reward: u64,
     pub timestamp: u64
+}
+
+#[derive(Serialize, Deserialize)]
+pub struct GetTransactions {
+    pub credits: u32,
+    pub status: String,
+    pub top_hash: String,
+    pub txs: Vec<GetTransactionsTxs>
+}
+
+#[derive(Serialize, Deserialize)]
+pub struct GetTransactionsTxs {
+    pub block_height: u32,
+    pub block_timestamp: u64,
+    pub double_spend_seen: bool,
+    pub in_pool: bool,
+    pub output_indices: Vec<u32>,
+    pub prunable_as_hex: String,
+    pub prunable_hash: String,
+    pub pruned_as_hex: String,
+    pub tx_hash: String
 }
