@@ -5,6 +5,8 @@
 extern crate reqwest;
 mod data_types;
 use rocket_contrib::json::{Json, JsonValue};
+use rocket_contrib::templates::Template;
+use rocket_contrib::serve::StaticFiles;
 use reqwest::blocking::RequestBuilder;
 use std::env;
 use data_types::*;
@@ -63,6 +65,14 @@ fn get_daemon_info() -> Json<GetInfoResult> {
     Json(res.result)
 }
 
+#[get("/")]
+fn index() -> Template {
+    let res: GetInfo = issue_rpc(&"get_info", None)
+        .send().unwrap().json().unwrap();
+    // let res_json = serde_json::to_string(&res.result).unwrap();
+    Template::render("index", &res.result)
+}
+
 #[catch(404)]
 fn not_found() -> JsonValue {
     json!({
@@ -77,13 +87,16 @@ fn main() {
         Ok(_) => {
             rocket::ignite()
                 .mount("/", routes![
+                    index,
                     get_daemon_info
                 ])
                 .mount("/block", routes![
                     get_block_header_by_block_hash,
                     get_block_header_by_transaction_hash
                 ])
+                .mount("/static", StaticFiles::from("./static"))
                 .register(catchers![not_found])
+                .attach(Template::fairing())
                 .launch();
         },
         Err(_) => panic!("Environment variable `DAEMON_URI` not provided.")

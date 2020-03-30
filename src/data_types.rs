@@ -32,14 +32,14 @@ impl Default for RPCParams {
     }
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Hash, Eq, PartialEq, Debug)]
 pub struct GetInfo {
     pub jsonrpc: String,
     pub id: String,
     pub result: GetInfoResult
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Hash, Eq, PartialEq, Debug)]
 pub struct GetInfoResult {
     pub alt_blocks_count: u32,
     pub block_size_limit: u32,
@@ -110,26 +110,19 @@ pub struct BlockHeader {
     pub orphan_status: bool,
     pub prev_hash: String,
     pub reward: u64,
-    pub timestamp: u64
+    pub timestamp: i64
 }
 
 #[derive(Serialize, Deserialize)]
 pub struct GetTransactions {
-    pub credits: u32,
-    pub status: String,
-    pub top_hash: String,
     pub txs: Vec<GetTransactionsTxs>
 }
 
 #[derive(Serialize, Deserialize)]
 pub struct GetTransactionsTxs {
     pub block_height: u32,
-    pub block_timestamp: u64,
+    pub block_timestamp: i64,
     pub double_spend_seen: bool,
     pub in_pool: bool,
     pub output_indices: Vec<u32>,
-    pub prunable_as_hex: String,
-    pub prunable_hash: String,
-    pub pruned_as_hex: String,
-    pub tx_hash: String
 }
