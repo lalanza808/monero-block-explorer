@@ -1,38 +1,37 @@
 <!DOCTYPE html>
 <html>
- <head>
-   <meta charset="UTF-8">
-   <title>Monero Block Explorer</title>
-   <link rel="stylesheet" href="/static/css/main.css"/>
-   <link rel="stylesheet" href="/static/css/normalize.css"/>
- </head>
- <body>
-
-<div class="title">
-<h1>Monero Block Explorer</h1>
-</div>
-<div class="search">
-<h2>Search</h2>
-<form action="/" method="post">
-<input type="text" name="search_value" placeholder="Enter a transaction hash, block hash, or block height.">
-<input type="submit" value="Search">
-</form>
-</div>
-<div class="server-info">
-<h2>Server Info</h2>
-</div>
-<div class="network-stats">
-<h2>Network Stats</h2>
-</div>
-<div class="tx-pool">
-<h2>Transaction Pool</h2>
-</div>
-<div class="">
-<h2>Top Block</h2>
-</div>
-<div class="">
-<h2>Previous Block</h2>
-</div>
+  <head>
+    <meta charset="UTF-8">
+    <title>Monero Block Explorer</title>
+    <link rel="stylesheet" href="/static/css/main.css"/>
+    <link rel="stylesheet" href="/static/css/normalize.css"/>
+  </head>
+  <body>
+  <div class="title">
+    <h1>Monero Block Explorer</h1>
+  </div>
+  <div class="search">
+    <h2>Search</h2>
+    <form action="/" method="post">
+      <input type="text" name="search_value" placeholder="Enter a transaction hash, block hash, or block height.">
+      <input type="submit" value="Search">
+    </form>
+  </div>
+  <div class="server-info">
+    <h2>Server Info</h2>
+  </div>
+  <div class="network-stats">
+    <h2>Network Stats</h2>
+  </div>
+  <div class="tx-pool">
+    <h2>Transaction Pool</h2>
+  </div>
+  <div class="">
+    <h2>Top Block</h2>
+  </div>
+  <div class="">
+    <h2>Previous Block</h2>
+  </div>
    <!--
    <p>alt_blocks_count: {{ alt_blocks_count }}</p>
    <p>block_size_limit: {{ block_size_limit }}</p>

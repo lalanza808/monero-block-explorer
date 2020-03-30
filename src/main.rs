@@ -65,11 +65,17 @@ fn get_daemon_info() -> Json<GetInfoResult> {
     Json(res.result)
 }
 
+#[post("/", format = "application/x-www-form-urlencoded")]
+fn something() -> Template {
+    let res: GetInfo = issue_rpc(&"get_info", None)
+        .send().unwrap().json().unwrap();
+    Template::render("search", &res.result)
+}
+
 #[get("/")]
 fn index() -> Template {
     let res: GetInfo = issue_rpc(&"get_info", None)
         .send().unwrap().json().unwrap();
-    // let res_json = serde_json::to_string(&res.result).unwrap();
     Template::render("index", &res.result)
 }
 
@@ -87,7 +93,7 @@ fn main() {
         Ok(_) => {
             rocket::ignite()
                 .mount("/", routes![
-                    index,
+                    index, something,
                     get_daemon_info
                 ])
                 .mount("/block", routes![
