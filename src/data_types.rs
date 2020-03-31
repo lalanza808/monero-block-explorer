@@ -20,14 +20,16 @@ impl Default for RPCPayload {
 #[derive(Serialize, Deserialize)]
 pub struct RPCParams {
     pub hash: Option<String>,
-    pub txs_hashes: Option<Vec<String>>
+    pub txs_hashes: Option<Vec<String>>,
+    pub height: Option<String>
 }
 
 impl Default for RPCParams {
     fn default() -> RPCParams {
         RPCParams {
             hash: None,
-            txs_hashes: None
+            txs_hashes: None,
+            height: None
         }
     }
 }
@@ -105,6 +107,7 @@ pub struct BlockHeader {
     pub height: u32,
     pub major_version: u8,
     pub minor_version: u8,
+    pub miner_tx_hash: Option<String>,
     pub nonce: u32,
     pub num_txes: u32,
     pub orphan_status: bool,
@@ -125,4 +128,20 @@ pub struct GetTransactionsTxs {
     pub double_spend_seen: bool,
     pub in_pool: bool,
     pub output_indices: Vec<u32>,
+}
+
+#[derive(Serialize, Deserialize)]
+pub struct GetBlock {
+    pub id: String,
+    pub jsonrpc: String,
+    pub result: GetBlockResult
+}
+
+#[derive(Serialize, Deserialize)]
+pub struct GetBlockResult {
+    pub blob: String,
+    pub block_header: BlockHeader,
+    pub credits: u8,
+    pub miner_tx_hash: String,
+    pub tx_hashes: Option<Vec<String>>,
 }

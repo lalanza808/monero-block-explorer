@@ -12,8 +12,8 @@
   </div>
   <div class="search">
     <h2>Search</h2>
-    <form action="/" method="post">
-      <input type="text" name="search_value" placeholder="Enter a transaction hash, block hash, or block height.">
+    <form action="/search" method="get">
+      <input type="text" name="value" placeholder="Enter a transaction hash, block hash, or block height.">
       <input type="submit" value="Search">
     </form>
   </div>
@@ -32,7 +32,8 @@
   <div class="">
     <h2>Previous Block</h2>
   </div>
-   <!--
+
+   <h1>get_info</h1>
    <p>alt_blocks_count: {{ alt_blocks_count }}</p>
    <p>block_size_limit: {{ block_size_limit }}</p>
    <p>block_size_median: {{ block_size_median }}</p>
@@ -71,7 +72,7 @@
    <p>was_bootstrap_ever_used: {{ was_bootstrap_ever_used }}</p>
    <p>white_peerlist_size: {{ white_peerlist_size }}</p>
    <p>wide_cumulative_difficulty: {{ wide_cumulative_difficulty }}</p>
-   <p>wide_difficulty: {{ wide_difficulty }}</p> -->
+   <p>wide_difficulty: {{ wide_difficulty }}</p>
 
  </body>
 </html>
