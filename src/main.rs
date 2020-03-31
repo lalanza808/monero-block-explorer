@@ -4,12 +4,14 @@
 #[macro_use] extern crate serde_derive;
 extern crate reqwest;
 mod data_types;
+
 use rocket::http::RawStr;
 use rocket::response::Redirect;
 use rocket_contrib::json::{Json, JsonValue};
 use rocket_contrib::templates::Template;
 use rocket_contrib::serve::StaticFiles;
 use reqwest::blocking::{RequestBuilder, Client};
+use reqwest::Error;
 use std::env;
 use data_types::*;
 
@@ -38,30 +40,29 @@ fn issue_raw_rpc(method: &str, params: JsonValue) -> RequestBuilder {
 }
 
 #[get("/block/hash/<block_hash>")]
-fn get_block_header_by_block_hash(block_hash: String) -> Json<BlockHeader> {
+fn get_block_by_hash(block_hash: String) -> Json<GetBlockResult> {
     let params = RPCParams {
         hash: Some(block_hash),
         ..Default::default()
     };
-    let res: BlockByHeaderHash = issue_rpc(&"get_block_header_by_hash", Some(params))
+    let res: GetBlock = issue_rpc(&"get_block", Some(params))
         .send().unwrap().json().unwrap();
-    Json(res.result.block_header)
+    Json(res.result)
 }
 
 #[get("/block/height/<block_height>")]
-fn get_block_by_height(block_height: String) -> String {
+fn get_block_by_height(block_height: String) -> Json<GetBlockResult> {
     let params = RPCParams {
         height: Some(block_height),
         ..Default::default()
     };
     let res: GetBlock = issue_rpc(&"get_block", Some(params))
         .send().unwrap().json().unwrap();
-    // Json(res.result.block_header)
-    serde_json::to_string(&res).unwrap()
+    Json(res.result)
 }
 
 #[get("/transaction/<tx_hash>")]
-fn get_block_header_by_transaction_hash(tx_hash: String) -> Json<GetTransactions> {
+fn get_transaction_by_hash(tx_hash: String) -> Json<GetTransactions> {
     let params: JsonValue = json!({"txs_hashes": [&tx_hash]});
     let res: GetTransactions = issue_raw_rpc(&"get_transactions", params)
         .send().unwrap().json().unwrap();
@@ -70,68 +71,53 @@ fn get_block_header_by_transaction_hash(tx_hash: String) -> Json<GetTransactions
 
 #[get("/search?<value>")]
 fn search(value: &RawStr) -> Redirect {
+    // This search implementation is not ideal but it works.
+    // We basically check the length of the search value and
+    // attempt to redirect to the appropriate route.
     let sl: usize = value.len();
-    let first_byte = value.get(0..1).unwrap();
-    println!("Search value: {}", value);
-    println!("First byte: {}", first_byte);
+    println!("{}", sl);
 
     if sl < 10 {
+        // Less than 10 characters is probably a block height. If it can
+        // be parsed as valid u32 then redirect to `get_block_by_height`,
+        // otherwise redirect to the error response.
         match value.parse::<u32>() {
-            Ok(v) => {
-                println!("Found: {}", v);
-                // "this looks like a block height"
-                return Redirect::found(uri!(get_block_by_height: value.as_str()));
-            },
-            Err(e) => {
-                println!("Error: {}", e);
-                // "this is an invalid search query"
-                return Redirect::found(uri!(index));
-            }
+            Ok(_) => return Redirect::found(uri!(get_block_by_height: value.as_str())),
+            Err(_) => return Redirect::found(uri!(error))
         }
-    } else if sl < 95 {
-        // "this looks like a tx or block hash"
-        return Redirect::found(uri!(index));
-    } else if sl == 95 {
-        match first_byte {
-            "9" => {
-                println!("This looks like a testnet address");
-                return Redirect::found(uri!(index));
-            },
-            "A" => {
-                println!("This looks like a testnet subaddress");
-                return Redirect::found(uri!(index));
-            },
-            "5" => {
-                println!("This looks like a stagenet address");
-                return Redirect::found(uri!(index));
-            },
-            "7" => {
-                println!("This looks like a stagenet subaddress");
-                return Redirect::found(uri!(index));
-            },
-            "4" => {
-                println!("This looks like a mainnet address");
-                return Redirect::found(uri!(index));
-            },
-            "8" => {
-                println!("This looks like a mainnet subaddress");
-                return Redirect::found(uri!(index));
-            },
-            _ => {
-                println!("Not sure what this is");
-                return Redirect::found(uri!(index));
-            }
-        }
-    } else if sl == 105 {
-        // "this looks like an integrated address"
-        return Redirect::found(uri!(index));
-    } else {
-        // "no idea what this is"
-        return Redirect::found(uri!(index));
-    };
+    } else if sl == 64 {
+        // Equal to 64 characters is probably a hash; block or tx.
+        // For this we attempt to query for a block with
+        // given hash. If we don't receive a valid/expected
+        // response then we attempt to query for a transaction hash.
+        // If neither works then redirect to error response.
+        let block_hash_params = RPCParams {
+            hash: Some(value.to_string()),
+            ..Default::default()
+        };
+        let check_valid_block_hash: Result<GetBlock, Error> = issue_rpc(
+            &"get_block", Some(block_hash_params)
+        ).send().unwrap().json();
 
-    // println!("No if stmt matched");
-    // return Redirect::found(uri!(index));
+        match check_valid_block_hash {
+            Ok(_) => return Redirect::found(uri!(get_block_by_hash: value.as_str())),
+            Err(_) => {
+                let tx_hash_params: JsonValue = json!({"txs_hashes": [&value.as_str()]});
+                let check_valid_tx_hash: Result<GetTransactions, Error> = issue_raw_rpc(
+                    &"get_transactions", tx_hash_params
+                ).send().unwrap().json();
+
+                match check_valid_tx_hash {
+                    Ok(_) => return Redirect::found(uri!(get_transaction_by_hash: value.as_str())),
+                    Err(_) => return Redirect::found(uri!(error))
+                }
+            }
+        }
+    } else {
+        // Anything else hasn't been implemented yet
+        // so redirect to error response.
+        return Redirect::found(uri!(error));
+    };
 }
 
 #[get("/")]
@@ -139,6 +125,14 @@ fn index() -> Template {
     let res: GetInfo = issue_rpc(&"get_info", None)
         .send().unwrap().json().unwrap();
     Template::render("index", &res.result)
+}
+
+#[get("/error", )]
+fn error() -> JsonValue {
+    json!({
+        "status": "error",
+        "reason": "There was an error while searching the provided values."
+    })
 }
 
 #[catch(404)]
@@ -158,8 +152,9 @@ fn main() {
                     index,
                     search,
                     get_block_by_height,
-                    get_block_header_by_block_hash,
-                    get_block_header_by_transaction_hash,
+                    get_block_by_hash,
+                    get_transaction_by_hash,
+                    error
                 ])
                 .mount("/static", StaticFiles::from("./static"))
                 .register(catchers![not_found])

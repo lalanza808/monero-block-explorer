@@ -1,78 +1,71 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="UTF-8">
-    <title>Monero Block Explorer</title>
-    <link rel="stylesheet" href="/static/css/main.css"/>
-    <link rel="stylesheet" href="/static/css/normalize.css"/>
-  </head>
-  <body>
-  <div class="title">
-    <h1>Monero Block Explorer</h1>
-  </div>
-  <div class="search">
-    <h2>Search</h2>
-    <form action="/search" method="get">
-      <input type="text" name="value" placeholder="Enter a transaction hash, block hash, or block height.">
-      <input type="submit" value="Search">
-    </form>
-  </div>
-  <div class="server-info">
-    <h2>Server Info</h2>
-  </div>
-  <div class="network-stats">
-    <h2>Network Stats</h2>
-  </div>
-  <div class="tx-pool">
-    <h2>Transaction Pool</h2>
-  </div>
-  <div class="">
-    <h2>Top Block</h2>
-  </div>
-  <div class="">
-    <h2>Previous Block</h2>
-  </div>
+{% extends "base" %}
 
-   <h1>get_info</h1>
-   <p>alt_blocks_count: {{ alt_blocks_count }}</p>
-   <p>block_size_limit: {{ block_size_limit }}</p>
-   <p>block_size_median: {{ block_size_median }}</p>
-   <p>block_weight_limit: {{ block_weight_limit }}</p>
-   <p>block_weight_median: {{ block_weight_median }}</p>
-   <p>bootstrap_daemon_address: {{ bootstrap_daemon_address }}</p>
-   <p>credits: {{ credits }}</p>
-   <p>cumulative_difficulty: {{ cumulative_difficulty }}</p>
-   <p>cumulative_difficulty_top64: {{ cumulative_difficulty_top64 }}</p>
-   <p>database_size: {{ database_size }}</p>
-   <p>difficulty: {{ difficulty }}</p>
-   <p>difficulty_top64: {{ difficulty_top64 }}</p>
-   <p>free_space: {{ free_space }}</p>
-   <p>grey_peerlist_size: {{ grey_peerlist_size }}</p>
-   <p>height: {{ height }}</p>
-   <p>height_without_bootstrap: {{ height_without_bootstrap }}</p>
-   <p>incoming_connections_count: {{ incoming_connections_count }}</p>
-   <p>mainnet: {{ mainnet }}</p>
-   <p>nettype: {{ nettype }}</p>
-   <p>offline: {{ offline }}</p>
-   <p>outgoing_connections_count: {{ outgoing_connections_count }}</p>
-   <p>rpc_connections_count: {{ rpc_connections_count }}</p>
-   <p>stagenet: {{ stagenet }}</p>
-   <p>start_time: {{ start_time }}</p>
-   <p>status: {{ status }}</p>
-   <p>target: {{ target }}</p>
-   <p>target_height: {{ target_height }}</p>
-   <p>testnet: {{ testnet }}</p>
-   <p>top_block_hash: {{ top_block_hash }}</p>
-   <p>top_hash: {{ top_hash }}</p>
-   <p>tx_count: {{ tx_count }}</p>
-   <p>tx_pool_size: {{ tx_pool_size }}</p>
-   <p>untrusted: {{ untrusted }}</p>
-   <p>update_available: {{ update_available }}</p>
-   <p>version: {{ version }}</p>
-   <p>was_bootstrap_ever_used: {{ was_bootstrap_ever_used }}</p>
-   <p>white_peerlist_size: {{ white_peerlist_size }}</p>
-   <p>wide_cumulative_difficulty: {{ wide_cumulative_difficulty }}</p>
-   <p>wide_difficulty: {{ wide_difficulty }}</p>
+{% block content %}
+<div class="title">
+  <h1>Monero Block Explorer</h1>
+</div>
+<div class="search">
+  <h2>Search</h2>
+  <form action="/search" method="get">
+    <input type="text" name="value" placeholder="Enter a transaction hash, block hash, or block height.">
+    <input type="submit" value="Search">
+  </form>
+</div>
+<div class="server-info">
+  <h2>Server Info</h2>
+</div>
+<div class="network-stats">
+  <h2>Network Stats</h2>
+</div>
+<div class="tx-pool">
+  <h2>Transaction Pool</h2>
+</div>
+<div class="">
+  <h2>Top Block</h2>
+</div>
+<div class="">
+  <h2>Previous Block</h2>
+</div>
 
- </body>
-</html>
+ <h1>get_info</h1>
+ <p>alt_blocks_count: {{ alt_blocks_count }}</p>
+ <p>block_size_limit: {{ block_size_limit }}</p>
+ <p>block_size_median: {{ block_size_median }}</p>
+ <p>block_weight_limit: {{ block_weight_limit }}</p>
+ <p>block_weight_median: {{ block_weight_median }}</p>
+ <p>bootstrap_daemon_address: {{ bootstrap_daemon_address }}</p>
+ <p>credits: {{ credits }}</p>
+ <p>cumulative_difficulty: {{ cumulative_difficulty }}</p>
+ <p>cumulative_difficulty_top64: {{ cumulative_difficulty_top64 }}</p>
+ <p>database_size: {{ database_size }}</p>
+ <p>difficulty: {{ difficulty }}</p>
+ <p>difficulty_top64: {{ difficulty_top64 }}</p>
+ <p>free_space: {{ free_space }}</p>
+ <p>grey_peerlist_size: {{ grey_peerlist_size }}</p>
+ <p>height: {{ height }}</p>
+ <p>height_without_bootstrap: {{ height_without_bootstrap }}</p>
+ <p>incoming_connections_count: {{ incoming_connections_count }}</p>
+ <p>mainnet: {{ mainnet }}</p>
+ <p>nettype: {{ nettype }}</p>
+ <p>offline: {{ offline }}</p>
+ <p>outgoing_connections_count: {{ outgoing_connections_count }}</p>
+ <p>rpc_connections_count: {{ rpc_connections_count }}</p>
+ <p>stagenet: {{ stagenet }}</p>
+ <p>start_time: {{ start_time }}</p>
+ <p>status: {{ status }}</p>
+ <p>target: {{ target }}</p>
+ <p>target_height: {{ target_height }}</p>
+ <p>testnet: {{ testnet }}</p>
+ <p>top_block_hash: {{ top_block_hash }}</p>
+ <p>top_hash: {{ top_hash }}</p>
+ <p>tx_count: {{ tx_count }}</p>
+ <p>tx_pool_size: {{ tx_pool_size }}</p>
+ <p>untrusted: {{ untrusted }}</p>
+ <p>update_available: {{ update_available }}</p>
+ <p>version: {{ version }}</p>
+ <p>was_bootstrap_ever_used: {{ was_bootstrap_ever_used }}</p>
+ <p>white_peerlist_size: {{ white_peerlist_size }}</p>
+ <p>wide_cumulative_difficulty: {{ wide_cumulative_difficulty }}</p>
+ <p>wide_difficulty: {{ wide_difficulty }}</p>
+ 
+{% endblock content %}

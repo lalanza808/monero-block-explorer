@@ -1,4 +1,4 @@
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Hash, Eq, PartialEq, Debug)]
 pub struct RPCPayload {
     pub jsonrpc: String,
     pub id: String,
@@ -17,7 +17,7 @@ impl Default for RPCPayload {
     }
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Hash, Eq, PartialEq, Debug)]
 pub struct RPCParams {
     pub hash: Option<String>,
     pub txs_hashes: Option<Vec<String>>,
@@ -84,21 +84,21 @@ pub struct GetInfoResult {
     pub wide_difficulty: String
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Hash, Eq, PartialEq, Debug)]
 pub struct BlockByHeaderHash {
     pub id: String,
     pub jsonrpc: String,
     pub result: BlockByHeaderHashResult
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Hash, Eq, PartialEq, Debug)]
 pub struct BlockByHeaderHashResult {
     pub status: String,
     pub untrusted: bool,
     pub block_header: BlockHeader
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Hash, Eq, PartialEq, Debug)]
 pub struct BlockHeader {
     pub block_size: u32,
     pub depth: u32,
@@ -116,12 +116,12 @@ pub struct BlockHeader {
     pub timestamp: i64
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Hash, Eq, PartialEq, Debug)]
 pub struct GetTransactions {
     pub txs: Vec<GetTransactionsTxs>
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Hash, Eq, PartialEq, Debug)]
 pub struct GetTransactionsTxs {
     pub block_height: u32,
     pub block_timestamp: i64,
@@ -130,16 +130,15 @@ pub struct GetTransactionsTxs {
     pub output_indices: Vec<u32>,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Hash, Eq, PartialEq, Debug)]
 pub struct GetBlock {
     pub id: String,
     pub jsonrpc: String,
     pub result: GetBlockResult
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Hash, Eq, PartialEq, Debug)]
 pub struct GetBlockResult {
-    pub blob: String,
     pub block_header: BlockHeader,
     pub credits: u8,
     pub miner_tx_hash: String,
