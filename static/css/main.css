@@ -263,3 +263,11 @@ textarea {
   }
 }
 
+.search {
+  width: 60%;
+  margin: 0 auto;
+}
+
+div.search input {
+  margin-top: 1em;
+}
