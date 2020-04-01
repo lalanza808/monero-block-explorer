@@ -279,3 +279,7 @@ section.box p {
 p.subheader {
   font-size: 1.3em;
 }
+
+.container td {
+  font-size: 1.1em;
+}
