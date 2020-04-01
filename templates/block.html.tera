@@ -64,6 +64,7 @@
         </section>
       </div>
       <br><br>
+      <div class="tx-table">
       <table>
         <caption><h2>Block Transactions</h2></caption>
         <tr>
@@ -75,7 +76,7 @@
         </tr>
         <tr>
           <td>√</td>
-          <td><a href="/transaction/{{ block_header.miner_tx_hash }}">{{ block_header.miner_tx_hash }}</a></td>
+          <td><a href="/transaction/{{ block_header.miner_tx_hash }}">{{ block_header.miner_tx_hash | truncate(length=8) }}</a></td>
           <td>{{ block_header.reward / 1000000000000 }} XMR</td>
           <td>0</td>
           <td>?</td>
@@ -84,7 +85,7 @@
           {% for hash in tx_hashes %}
             <tr>
               <td></td>
-              <td><a href="/transaction/{{ hash }}">{{ hash }}</a></td>
+              <td><a href="/transaction/{{ hash }}">{{ hash | truncate(length=8) }}</a></td>
               <td>?</td>
               <td>?</td>
               <td>?</td>
@@ -92,6 +93,7 @@
           {% endfor %}
         {% endif %}
       </table>
+      </div>
       <header class="major">
         <h2><a href="/block/hash/{{ block_header.prev_hash }}">Previous Block</a></h2>
       </header>

@@ -1,6 +1,7 @@
 {% extends "base" %}
 
 {% block content %}
+
  <section id="main">
    <div class="container">
      <div class="row">
@@ -15,7 +16,7 @@
                    <header>
                      <h3>Version</h3>
                    </header>
-                   <p>{{ version }}</p>
+                   <p>{% if version %}{{ version }}{% else %}?{% endif %}</p>
                  </section>
                </div>
                <div class="col-3 col-6-medium col-12-small">
@@ -42,8 +43,6 @@
                    <p>{{ nettype }}</p>
                  </section>
                </div>
-             </div>
-             <div class="row">
                <div class="col-3 col-6-medium col-12-small">
                  <section class="box">
                    <header>
@@ -80,6 +79,11 @@
            </section>
        </div>
      </div>
+     <br><br>
+     <header class="major">
+       <h2>Mempool Transactions</h2>
+       <p>soon</p>
+     </header>
    </div>
  </section>
 
