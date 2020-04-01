@@ -8,7 +8,36 @@
     <link rel="stylesheet" href="/static/css/dopetrope.css"/>
   </head>
   <body>
-    {% block content %}
-    {% endblock content %}
+    <div id="page-wrapper">
+      <section id="header">
+         <h1><a href="/">Monero Block Explorer</a></h1>
+          <nav id="nav">
+          <div class="search">
+            <form action="/search" method="get">
+              <input type="text" name="value" placeholder="Enter a transaction hash, block hash, or block height.">
+              <input type="submit" value="Search">
+            </form>
+          </div>
+          </nav>
+      </section>
+      {% block content %}
+      {% endblock content %}
+      <section id="footer">
+        <div class="container">
+          <div class="row">
+            <div class="col-12">
+                <div id="copyright">
+                  <ul class="links">
+                    <li><a href="https://html5up.net" target=_blank>Design by HTML5 UP</a></li>
+                    <li><a href="https://github.com/lalanza808/monero-block-explorer" target=_blank>Read the source</a></li>
+                    <li><a href="https://github.com/lalanza808/monero-block-explorer/issues/new" target=_blank>File a bug or request</a></li>
+                    <li><a href="https://twitter.com/lza_menace" target=_blank>Holler at me</a></li>
+                  </ul>
+                </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
   </body>
 </html>

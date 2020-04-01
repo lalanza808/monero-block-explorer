@@ -1,0 +1,101 @@
+{% extends "base" %}
+
+{% block content %}
+
+<section id="main">
+  <div class="container">
+    <div class="col-12">
+        <section>
+          <header class="major">
+            <h2>Block {{ block_header.height }}</h2>
+            <p class="subheader"><strong>Hash</strong>: {{ block_header.hash }}</p>
+            <p class="subheader"><strong>Timestamp</strong>: {{ block_header.timestamp }}
+          </header>
+          <div class="row">
+            <div class="col-4 col-6-medium col-12-small">
+              <section class="box">
+                <header>
+                  <h3>Size</h3>
+                </header>
+                <p>{{ block_header.block_size }} bytes</p>
+              </section>
+            </div>
+            <div class="col-4 col-6-medium col-12-small">
+              <section class="box">
+                <header>
+                  <h3>Depth</h3>
+                </header>
+                <p>{{ block_header.depth }}</p>
+              </section>
+            </div>
+            <div class="col-4 col-6-medium col-12-small">
+              <section class="box">
+                <header>
+                  <h3>Difficulty</h3>
+                </header>
+                <p>{{ block_header.difficulty }}</p>
+              </section>
+            </div>
+            <div class="col-4 col-6-medium col-12-small">
+              <section class="box">
+                <header>
+                  <h3>Transactions</h3>
+                </header>
+                <p>{% if tx_hashes %}{{ tx_hashes | length }}{% else %}0{% endif %}</p>
+              </section>
+            </div>
+            <div class="col-4 col-6-medium col-12-small">
+              <section class="box">
+                <header>
+                  <h3>Orphaned</h3>
+                </header>
+                <p>{{ block_header.orphan_status }}</p>
+              </section>
+            </div>
+            <div class="col-4 col-6-medium col-12-small">
+              <section class="box">
+                <header>
+                  <h3>Nonce</h3>
+                </header>
+                <p>{{ block_header.nonce }}</p>
+              </section>
+            </div>
+          </div>
+        </section>
+      </div>
+      <br><br>
+      <table>
+        <caption><h2>Block Transactions</h2></caption>
+        <tr>
+          <th>Coinbase</th>
+          <th>Hash</th>
+          <th>Amount</th>
+          <th>Fee</th>
+          <th>Bytes</th>
+        </tr>
+        <tr>
+          <td>√</td>
+          <td><a href="/transaction/{{ block_header.miner_tx_hash }}">{{ block_header.miner_tx_hash }}</a></td>
+          <td>{{ block_header.reward / 1000000000000 }} XMR</td>
+          <td>0</td>
+          <td>?</td>
+        </tr>
+        {% if tx_hashes %}
+          {% for hash in tx_hashes %}
+            <tr>
+              <td></td>
+              <td><a href="/transaction/{{ hash }}">{{ hash }}</a></td>
+              <td>?</td>
+              <td>?</td>
+              <td>?</td>
+            </tr>
+          {% endfor %}
+        {% endif %}
+      </table>
+      <header class="major">
+        <h2><a href="/block/hash/{{ block_header.prev_hash }}">Previous Block</a></h2>
+      </header>
+    </div>
+</section>
+
+{% endblock content %}

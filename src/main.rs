@@ -40,25 +40,25 @@ fn issue_raw_rpc(method: &str, params: JsonValue) -> RequestBuilder {
 }
 
 #[get("/block/hash/<block_hash>")]
-fn get_block_by_hash(block_hash: String) -> Json<GetBlockResult> {
+fn get_block_by_hash(block_hash: String) -> Template {
     let params = RPCParams {
         hash: Some(block_hash),
         ..Default::default()
     };
     let res: GetBlock = issue_rpc(&"get_block", Some(params))
         .send().unwrap().json().unwrap();
-    Json(res.result)
+    Template::render("block", &res.result)
 }
 
 #[get("/block/height/<block_height>")]
-fn get_block_by_height(block_height: String) -> Json<GetBlockResult> {
+fn get_block_by_height(block_height: String) -> Template {
     let params = RPCParams {
         height: Some(block_height),
         ..Default::default()
     };
     let res: GetBlock = issue_rpc(&"get_block", Some(params))
         .send().unwrap().json().unwrap();
-    Json(res.result)
+    Template::render("block", &res.result)
 }
 
 #[get("/transaction/<tx_hash>")]
@@ -75,10 +75,8 @@ fn search(value: &RawStr) -> Redirect {
     // We basically check the length of the search value and
     // attempt to redirect to the appropriate route.
     let sl: usize = value.len();
-    println!("{}", sl);
-
-    if sl < 10 {
-        // Less than 10 characters is probably a block height. If it can
+    if sl < 8 {
+        // Less than 8 characters is probably a block height. If it can
         // be parsed as valid u32 then redirect to `get_block_by_height`,
         // otherwise redirect to the error response.
         match value.parse::<u32>() {

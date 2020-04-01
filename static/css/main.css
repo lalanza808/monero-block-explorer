@@ -271,3 +271,11 @@ textarea {
 div.search input {
   margin-top: 1em;
 }
+
+section.box p {
+  font-size: 1.3em;
+}
+
+p.subheader {
+  font-size: 1.3em;
+}
