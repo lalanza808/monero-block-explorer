@@ -46,7 +46,7 @@
                <div class="col-3 col-6-medium col-12-small">
                  <section class="box">
                    <header>
-                     <h3>Transactions</h3>
+                     <h3>Transaction Count</h3>
                    </header>
                    <p>{{ daemon_info.tx_count }}</p>
                  </section>
@@ -54,9 +54,9 @@
                <div class="col-3 col-6-medium col-12-small">
                  <section class="box">
                    <header>
-                     <h3>Mempool Size</h3>
+                     <h3>Database Size</h3>
                    </header>
-                   <p>{{ daemon_info.tx_pool_size }}</p>
+                   <p>{{ daemon_info.database_size / 1000000000 }} GB</p>
                  </section>
                </div>
                <div class="col-3 col-6-medium col-12-small">
@@ -83,7 +83,7 @@
      <header class="major">
        <div class="tx-table">
        <table>
-         <caption><h2>Transaction Pool</h2></caption>
+         <caption><h2>Transaction Pool ({{ daemon_info.tx_pool_size }})</h2></caption>
          <tr>
            <th>Hash</th>
            <th>Amount</th>

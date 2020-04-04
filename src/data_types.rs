@@ -176,5 +176,39 @@ pub struct Transactions {
     pub receive_time: i64,
     pub relayed: bool,
     pub tx_blob: String,
+    pub tx_json: String,
     pub weight: u32
 }
+
+// #[derive(Serialize, Deserialize, Hash, Eq, PartialEq, Debug)]
+// pub struct TransactionJSON {
+//     pub version: u32,
+//     pub unlock_time: u64,
+//     pub vin: TransactionInputs,
+//     pub vout: TransactionOutputs,
+//     pub extra: String,
+//     pub signatures: Vec<String>
+// }
+//
+// #[derive(Serialize, Deserialize, Hash, Eq, PartialEq, Debug)]
+// pub struct TransactionInputs {
+//     pub pubkey: PreviousTransactionKey
+// }
+//
+// #[derive(Serialize, Deserialize, Hash, Eq, PartialEq, Debug)]
+// pub struct PreviousTransactionKey {
+//     pub amount: u32,
+//     pub key_offsets: Vec<u32>,
+//     pub k_image: String
+// }
+//
+// #[derive(Serialize, Deserialize, Hash, Eq, PartialEq, Debug)]
+// pub struct TransactionOutputs {
+//     pub amount: u32,
+//     pub target: OutputStealthAddress
+// }
+//
+// #[derive(Serialize, Deserialize, Hash, Eq, PartialEq, Debug)]
+// pub struct OutputStealthAddress {
+//     pub key: String
+// }
