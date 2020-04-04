@@ -22,7 +22,7 @@ fn issue_rpc(method: &str, params: Option<RPCParams>) -> RequestBuilder {
         env::var("DAEMON_URI").unwrap()
     );
     let post_data = RPCPayload {
-        method: method.to_string(),
+        method: Some(method.to_string()),
         params: params,
         ..Default::default()
     };
@@ -37,6 +37,29 @@ fn issue_raw_rpc(method: &str, params: JsonValue) -> RequestBuilder {
         &method
     );
     http_client.post(&url).json(&params)
+}
+
+fn build_rpc(method: &str, data: Option<JsonValue>, raw: bool) -> RequestBuilder {
+    let http_client = Client::new();
+    let daemon_uri = env::var("DAEMON_URI").unwrap();
+    match raw {
+        true => {
+            let uri = format!("{}/{}", &daemon_uri, &method);
+            if let None = data {
+                http_client.post(&uri)
+            } else {
+                http_client.post(&uri).json(&data)
+            }
+        },
+        false => {
+            let uri = format!("{}/json_rpc", &daemon_uri);
+            let data = RPCPayload {
+                method: Some(method.to_string()),
+                ..Default::default()
+            };
+            http_client.post(&uri).json(&data)
+        }
+    }
 }
 
 #[get("/block/hash/<block_hash>")]
@@ -120,9 +143,19 @@ fn search(value: &RawStr) -> Redirect {
 
 #[get("/")]
 fn index() -> Template {
-    let res: GetInfo = issue_rpc(&"get_info", None)
+    let daemon_info: GetInfo = issue_rpc(&"get_info", None)
         .send().unwrap().json().unwrap();
-    Template::render("index", &res.result)
+
+    let tx_pool: GetTransactionPool = build_rpc(
+        &"get_transaction_pool", None, true
+    ).send().unwrap().json().unwrap();
+
+    let context: JsonValue = json!({
+        "daemon_info": daemon_info.result,
+        "tx_pool": tx_pool.transactions
+    });
+
+    Template::render("index", context)
 }
 
 #[get("/error", )]

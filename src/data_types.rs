@@ -2,7 +2,7 @@
 pub struct RPCPayload {
     pub jsonrpc: String,
     pub id: String,
-    pub method: String,
+    pub method: Option<String>,
     pub params: Option<RPCParams>
 }
 
@@ -11,7 +11,7 @@ impl Default for RPCPayload {
         RPCPayload {
             jsonrpc: "2.0".to_string(),
             id: "0".to_string(),
-            method: "get_info".to_string(),
+            method: None,
             params: None,
         }
     }
@@ -143,4 +143,38 @@ pub struct GetBlockResult {
     pub credits: u8,
     pub miner_tx_hash: String,
     pub tx_hashes: Option<Vec<String>>,
+}
+
+#[derive(Serialize, Deserialize, Hash, Eq, PartialEq, Debug)]
+pub struct GetTransactionPool {
+    pub credits: u32,
+    pub spent_key_images: Vec<SpentKeyImages>,
+    pub status: String,
+    pub top_hash: String,
+    pub transactions: Vec<Transactions>
+}
+
+#[derive(Serialize, Deserialize, Hash, Eq, PartialEq, Debug)]
+pub struct SpentKeyImages {
+    pub id_hash: String,
+    pub txs_hashes: Vec<String>
+}
+
+#[derive(Serialize, Deserialize, Hash, Eq, PartialEq, Debug)]
+pub struct Transactions {
+    pub blob_size: u32,
+    pub do_not_relay: bool,
+    pub double_spend_seen: bool,
+    pub fee: u64,
+    pub id_hash: String,
+    pub kept_by_block: bool,
+    pub last_failed_height: u32,
+    pub last_failed_id_hash: String,
+    pub last_relayed_time: i64,
+    pub max_used_block_height: u32,
+    pub max_used_block_id_hash: String,
+    pub receive_time: i64,
+    pub relayed: bool,
+    pub tx_blob: String,
+    pub weight: u32
 }

@@ -283,3 +283,7 @@ p.subheader {
 .container td {
   font-size: 1.1em;
 }
+
+.tx-table th, .tx-table td {
+  text-align: center;
+}

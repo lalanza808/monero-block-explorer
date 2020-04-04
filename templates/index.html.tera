@@ -16,7 +16,7 @@
                    <header>
                      <h3>Version</h3>
                    </header>
-                   <p>{% if version %}{{ version }}{% else %}?{% endif %}</p>
+                   <p>{% if daemon_info.version %}{{ daemon_info.version }}{% else %}?{% endif %}</p>
                  </section>
                </div>
                <div class="col-3 col-6-medium col-12-small">
@@ -24,7 +24,7 @@
                    <header>
                      <h3>Difficulty</h3>
                    </header>
-                   <p>{{ difficulty }}</p>
+                   <p>{{ daemon_info.difficulty }}</p>
                  </section>
                </div>
                <div class="col-3 col-6-medium col-12-small">
@@ -32,7 +32,7 @@
                    <header>
                      <h3>Height</h3>
                    </header>
-                   <p>{{ height }}</p>
+                   <p>{{ daemon_info.height }}</p>
                  </section>
                </div>
                <div class="col-3 col-6-medium col-12-small">
@@ -40,7 +40,7 @@
                    <header>
                      <h3>Network</h3>
                    </header>
-                   <p>{{ nettype }}</p>
+                   <p>{{ daemon_info.nettype }}</p>
                  </section>
                </div>
                <div class="col-3 col-6-medium col-12-small">
@@ -48,7 +48,7 @@
                    <header>
                      <h3>Transactions</h3>
                    </header>
-                   <p>{{ tx_count }}</p>
+                   <p>{{ daemon_info.tx_count }}</p>
                  </section>
                </div>
                <div class="col-3 col-6-medium col-12-small">
@@ -56,7 +56,7 @@
                    <header>
                      <h3>Mempool Size</h3>
                    </header>
-                   <p>{{ tx_pool_size }}</p>
+                   <p>{{ daemon_info.tx_pool_size }}</p>
                  </section>
                </div>
                <div class="col-3 col-6-medium col-12-small">
@@ -64,7 +64,7 @@
                    <header>
                      <h3>Connections</h3>
                    </header>
-                   <p>{{ incoming_connections_count }} in / {{ outgoing_connections_count }} out</p>
+                   <p>{{ daemon_info.incoming_connections_count }} in / {{ daemon_info.outgoing_connections_count }} out</p>
                  </section>
                </div>
                <div class="col-3 col-6-medium col-12-small">
@@ -72,7 +72,7 @@
                    <header>
                      <h3>Status</h3>
                    </header>
-                   <p>{{ status }}</p>
+                   <p>{{ daemon_info.status }}</p>
                  </section>
                </div>
              </div>
@@ -81,8 +81,23 @@
      </div>
      <br><br>
      <header class="major">
-       <h2>Mempool Transactions</h2>
-       <p>soon</p>
+       <div class="tx-table">
+       <table>
+         <caption><h2>Transaction Pool</h2></caption>
+         <tr>
+           <th>Hash</th>
+           <th>Amount</th>
+           <th>Fee</th>
+         </tr>
+         {% for tx in tx_pool %}
+           <tr>
+             <td>{{ tx.id_hash | truncate(length=8) }}</td>
+             <td>?</td>
+             <td>{{ tx.fee / 1000000000000 }} XMR</td>
+           </tr>
+         {% endfor %}
+       </table>
+       </div>
      </header>
    </div>
  </section>
