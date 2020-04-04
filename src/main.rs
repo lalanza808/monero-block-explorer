@@ -98,7 +98,9 @@ fn search(value: &RawStr) -> Redirect {
     // We basically check the length of the search value and
     // attempt to redirect to the appropriate route.
     let sl: usize = value.len();
-    if sl < 8 {
+    if sl == 0 {
+        return Redirect::found(uri!(index));
+    } else if sl < 8 {
         // Less than 8 characters is probably a block height. If it can
         // be parsed as valid u32 then redirect to `get_block_by_height`,
         // otherwise redirect to the error response.

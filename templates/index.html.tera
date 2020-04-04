@@ -56,7 +56,7 @@
                    <header>
                      <h3>Database Size</h3>
                    </header>
-                   <p>{{ daemon_info.database_size / 1000000000 }} GB</p>
+                   <p>{% if daemon_info.database_size %}{{ daemon_info.database_size / 1000000000 }} GB{% else %}?{% endif %}</p>
                  </section>
                </div>
                <div class="col-3 col-6-medium col-12-small">
@@ -83,7 +83,10 @@
      <header class="major">
        <div class="tx-table">
        <table>
-         <caption><h2>Transaction Pool ({{ daemon_info.tx_pool_size }})</h2></caption>
+         <caption>
+           <h2>Transaction Pool ({{ daemon_info.tx_pool_size }})</h2>
+           <p>Transactions that have yet to be mined into a block. This is where payments sit in a PENDING state.</p>
+         </caption>
          <tr>
            <th>Hash</th>
            <th>Amount</th>
