@@ -85,11 +85,15 @@ fn get_block_by_height(block_height: String) -> Template {
 }
 
 #[get("/transaction/<tx_hash>")]
-fn get_transaction_by_hash(tx_hash: String) -> Json<GetTransactions> {
+fn get_transaction_by_hash(tx_hash: String) -> Template {
     let params: JsonValue = json!({"txs_hashes": [&tx_hash]});
     let res: GetTransactions = issue_raw_rpc(&"get_transactions", params)
         .send().unwrap().json().unwrap();
-    Json(res)
+    let context = json!({
+        "tx_info": res.txs,
+        "tx_hash": tx_hash
+    });
+    Template::render("transaction", context)
 }
 
 #[get("/search?<value>")]
