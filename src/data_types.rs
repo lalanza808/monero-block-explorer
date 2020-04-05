@@ -123,11 +123,11 @@ pub struct GetTransactions {
 
 #[derive(Serialize, Deserialize, Hash, Eq, PartialEq, Debug)]
 pub struct GetTransactionsTxs {
-    pub block_height: u32,
-    pub block_timestamp: i64,
+    pub block_height: Option<u32>,
+    pub block_timestamp: Option<i64>,
     pub double_spend_seen: bool,
     pub in_pool: bool,
-    pub output_indices: Vec<u32>,
+    pub output_indices: Option<Vec<u32>>,
 }
 
 #[derive(Serialize, Deserialize, Hash, Eq, PartialEq, Debug)]
@@ -177,7 +177,14 @@ pub struct Transactions {
     pub relayed: bool,
     pub tx_blob: String,
     pub tx_json: String,
+    pub tx_json_full: Option<TransactionJSON>,
     pub weight: u32
+}
+
+impl Transactions {
+    pub fn process(&mut self) {
+        self.tx_json_full = Some(serde_json::from_str(&self.tx_json).unwrap())
+    }
 }
 
 #[derive(Serialize, Deserialize, Hash, Eq, PartialEq, Debug)]

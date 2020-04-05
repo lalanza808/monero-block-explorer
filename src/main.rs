@@ -7,7 +7,7 @@ mod data_types;
 
 use rocket::http::RawStr;
 use rocket::response::Redirect;
-use rocket_contrib::json::JsonValue;
+use rocket_contrib::json::{Json,JsonValue};
 use rocket_contrib::templates::Template;
 use rocket_contrib::serve::StaticFiles;
 use reqwest::blocking::{RequestBuilder, Client};
@@ -147,6 +147,19 @@ fn search(value: &RawStr) -> Redirect {
     };
 }
 
+#[get("/tx_pool")]
+fn show_tx_pool() -> Json<GetTransactionPool> {
+    let mut tx_pool: GetTransactionPool = build_rpc(
+        &"get_transaction_pool", None, true
+    ).send().unwrap().json().unwrap();
+
+    for f in &mut tx_pool.transactions {
+        f.process();
+    };
+
+    Json(tx_pool)
+}
+
 #[get("/")]
 fn index() -> Template {
     let daemon_info: GetInfo = issue_rpc(&"get_info", None)
@@ -159,6 +172,7 @@ fn index() -> Template {
     let mut tx_json_raw: Vec<TransactionJSON> = vec![];
 
     for f in &mut tx_pool.transactions {
+        f.process();
         let j: TransactionJSON = serde_json::from_str(&f.tx_json).unwrap();
         tx_json_raw.push(j)
     };
@@ -196,6 +210,7 @@ fn main() {
                 .mount("/", routes![
                     index,
                     search,
+                    show_tx_pool,
                     get_block_by_height,
                     get_block_by_hash,
                     get_transaction_by_hash,

@@ -88,39 +88,21 @@
            <p>Transactions that have yet to be mined into a block. This is where payments sit in a PENDING state.</p>
          </caption>
          <tr>
+           <th>Received Time</th>
            <th>Hash</th>
-           <th>Amount</th>
            <th>Fee</th>
+           <th>Inputs / Outputs</th>
+           <th>Ring Decoys</th>
          </tr>
-         {% for tx in tx_json %}
-
-           <p>Ring Sig Type: {{ tx.rct_signatures.type }}</p>
-           <p>Tx Fee: {{ tx.rct_signatures.txnFee }}</p>
-           <p>Extra: {{ tx.extra }}</p>
-           <h1>Tx Inputs</h1>
-           {{ tx.vin | length }}
-           {% for vin in tx.vin %}
-             <p>Amount: {{ vin.key.amount / 1000000000000 }} XMR</p>
-             <p>Key Image: {{ vin.key.k_image }}</p>
-             <p>Key Offsets: {{ vin.key.key_offsets }}</p>
-           {% endfor %}
-           <h1>Tx Outputs</h1>
-           {% for vout in tx.vout %}
-             <p>Amount: {{ vout.amount / 1000000000000 }} XMR</p>
-             <p>Stealth Address: {{ vout.target.key }}</p>
-           {% endfor %}
-
-         {% endfor %}
-         
-         {% comment %}
          {% for tx in tx_pool %}
            <tr>
-             <td>{{ tx.id_hash | truncate(length=8) }}</td>
-             <td>?</td>
+             <td>{{ tx.receive_time }}</td>
+             <td><a href="/transaction/{{ tx.id_hash }}">{{ tx.id_hash | truncate(length=8) }}</a></td>
              <td>{{ tx.fee / 1000000000000 }} XMR</td>
+             <td>{{ tx.tx_json_full.vin | length }} / {{ tx.tx_json_full.vout | length }}</td>
+             <td>{{ tx.tx_json_full.vin.0.key.key_offsets | length }}</td>
            </tr>
          {% endfor %}
-         {% endcomment %}
        </table>
        </div>
      </header>
