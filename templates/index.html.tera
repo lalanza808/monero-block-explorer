@@ -92,6 +92,27 @@
            <th>Amount</th>
            <th>Fee</th>
          </tr>
+         {% for tx in tx_json %}
+
+           <p>Ring Sig Type: {{ tx.rct_signatures.type }}</p>
+           <p>Tx Fee: {{ tx.rct_signatures.txnFee }}</p>
+           <p>Extra: {{ tx.extra }}</p>
+           <h1>Tx Inputs</h1>
+           {{ tx.vin | length }}
+           {% for vin in tx.vin %}
+             <p>Amount: {{ vin.key.amount / 1000000000000 }} XMR</p>
+             <p>Key Image: {{ vin.key.k_image }}</p>
+             <p>Key Offsets: {{ vin.key.key_offsets }}</p>
+           {% endfor %}
+           <h1>Tx Outputs</h1>
+           {% for vout in tx.vout %}
+             <p>Amount: {{ vout.amount / 1000000000000 }} XMR</p>
+             <p>Stealth Address: {{ vout.target.key }}</p>
+           {% endfor %}
+
+         {% endfor %}
+         
+         {% comment %}
          {% for tx in tx_pool %}
            <tr>
              <td>{{ tx.id_hash | truncate(length=8) }}</td>
@@ -99,6 +120,7 @@
              <td>{{ tx.fee / 1000000000000 }} XMR</td>
            </tr>
          {% endfor %}
+         {% endcomment %}
        </table>
        </div>
      </header>

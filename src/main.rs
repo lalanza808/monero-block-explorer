@@ -7,7 +7,7 @@ mod data_types;
 
 use rocket::http::RawStr;
 use rocket::response::Redirect;
-use rocket_contrib::json::{Json, JsonValue};
+use rocket_contrib::json::JsonValue;
 use rocket_contrib::templates::Template;
 use rocket_contrib::serve::StaticFiles;
 use reqwest::blocking::{RequestBuilder, Client};
@@ -152,13 +152,21 @@ fn index() -> Template {
     let daemon_info: GetInfo = issue_rpc(&"get_info", None)
         .send().unwrap().json().unwrap();
 
-    let tx_pool: GetTransactionPool = build_rpc(
+    let mut tx_pool: GetTransactionPool = build_rpc(
         &"get_transaction_pool", None, true
     ).send().unwrap().json().unwrap();
 
+    let mut tx_json_raw: Vec<TransactionJSON> = vec![];
+
+    for f in &mut tx_pool.transactions {
+        let j: TransactionJSON = serde_json::from_str(&f.tx_json).unwrap();
+        tx_json_raw.push(j)
+    };
+
     let context: JsonValue = json!({
         "daemon_info": daemon_info.result,
-        "tx_pool": tx_pool.transactions
+        "tx_pool": tx_pool.transactions,
+        "tx_json": tx_json_raw
     });
 
     Template::render("index", context)
