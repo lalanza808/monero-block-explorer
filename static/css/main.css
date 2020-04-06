@@ -287,3 +287,8 @@ p.subheader {
 .tx-table th, .tx-table td {
   text-align: center;
 }
+
+.center {
+  margin: 0 auto;
+  display: block;
+}

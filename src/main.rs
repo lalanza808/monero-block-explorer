@@ -3,6 +3,7 @@
 #[macro_use] extern crate rocket_contrib;
 #[macro_use] extern crate serde_derive;
 extern crate reqwest;
+extern crate qrcode_generator;
 mod data_types;
 
 use rocket::http::RawStr;
@@ -12,6 +13,7 @@ use rocket_contrib::templates::Template;
 use rocket_contrib::serve::StaticFiles;
 use reqwest::blocking::{RequestBuilder, Client};
 use reqwest::Error;
+use qrcode_generator::QrCodeEcc;
 use std::env;
 use data_types::*;
 
@@ -96,6 +98,19 @@ fn get_transaction_by_hash(tx_hash: String) -> Template {
     Template::render("transaction", context)
 }
 
+#[get("/address/<wallet_address>")]
+fn show_wallet_address(wallet_address: String) -> Template {
+    let address_uri = format!("monero:{}", wallet_address);
+    let qr_code: String = qrcode_generator::to_svg_to_string(address_uri, QrCodeEcc::Low, 256, None)
+        .unwrap();
+    let qr_code: String = base64::encode(qr_code);
+    let context: JsonValue = json!({
+        "qr_code": qr_code,
+        "wallet_address": wallet_address
+    });
+    Template::render("address", context)
+}
+
 #[get("/search?<value>")]
 fn search(value: &RawStr) -> Redirect {
     // This search implementation is not ideal but it works.
@@ -140,6 +155,14 @@ fn search(value: &RawStr) -> Redirect {
                 }
             }
         }
+    } else if sl == 95 {
+        // Equal to 95 characters is probably a wallet address.
+        // For this let's just redirect to the `show_wallet_address` route.
+        return Redirect::found(uri!(show_wallet_address: value.as_str()))
+    } else if sl == 105 {
+        // Equal to 105 characters is probably an integrated address.
+        // For this let's just redirect to the `show_wallet_address` route.
+        return Redirect::found(uri!(show_wallet_address: value.as_str()))
     } else {
         // Anything else hasn't been implemented yet
         // so redirect to error response.
@@ -214,6 +237,7 @@ fn main() {
                     get_block_by_height,
                     get_block_by_hash,
                     get_transaction_by_hash,
+                    show_wallet_address,
                     error
                 ])
                 .mount("/static", StaticFiles::from("./static"))

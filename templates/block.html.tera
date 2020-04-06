@@ -9,7 +9,7 @@
           <header class="major">
             <h2>Block {{ block_header.height }}</h2>
             <p class="subheader"><strong>Hash</strong>: {{ block_header.hash }}</p>
-            <p class="subheader"><strong>Timestamp</strong>: {{ block_header.timestamp }}
+            <p class="subheader"><strong>Timestamp</strong>: {{ block_header.timestamp }}</p>
           </header>
           <div class="row">
             <div class="col-4 col-6-medium col-12-small">

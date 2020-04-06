@@ -17,7 +17,7 @@
           <header class="major">
             <h2>Transaction {{ tx_hash | truncate(length=4) }}</h2>
             <p class="subheader"><strong>Full Hash</strong>: {{ tx_hash }}</p>
-            <p class="subheader"><strong>Block Timestamp</strong>: {{ tx_info.0.block_timestamp }}
+            <p class="subheader"><strong>Block Timestamp</strong>: {% if tx_info.0.block_timestamp %}{{ tx_info.0.block_timestamp }}{% else %}?{% endif %}</p>
           </header>
           <div class="row">
             <div class="col-4 col-6-medium col-12-small">

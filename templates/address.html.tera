@@ -1,0 +1,35 @@
+{% extends "base" %}
+
+{% block content %}
+
+<section id="main">
+  <div class="container">
+    <div class="col-12">
+      <section>
+        <header class="major">
+          <h2>Wallet Address</h2>
+          <p class="subheader"><strong>Address</strong>: {{ wallet_address }}</p>
+        </header>
+        <div class="center">
+          <img src="data:image/svg+xml;base64,{{ qr_code }}" width=200 class="center">
+        </div>
+        <!-- Want to generate a QR code for incoming payment?
+        <form action="." method="get">
+          <input type="text" name="amount" placeholder="Enter amount for transaction.">
+          <input type="submit" value="Search">
+        </form> -->
+      </section>
+    </div>
+  </div>
+</section>
+
+<!--
+https://monero.fandom.com/wiki/URI_formatting
+address 	String 	hierarch.	The raw address (or the openalias?).
+tx_payment_id 	String 	?	The proposed payment ID of the transaction.
+recipient_name 	String 	?	The proposed contact name of the recipient.
+tx_amount 	UInt64 	query 	The proposed amount of the transaction in floating point units (eg. 5.3 XMR instead of 5300000000000)
+tx_description 	String 	fragment 	Describes the transaction which should be initiated.
+-->
+
+{% endblock content %}
