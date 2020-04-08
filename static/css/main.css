@@ -284,6 +284,11 @@ p.subheader {
   font-size: 1.1em;
 }
 
+.tx-table {
+  width: 60%;
+  margin: 0 auto;
+}
+
 .tx-table th, .tx-table td {
   text-align: center;
 }

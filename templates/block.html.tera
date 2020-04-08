@@ -39,17 +39,17 @@
             <div class="col-4 col-6-medium col-12-small">
               <section class="box">
                 <header>
-                  <h3>Transactions</h3>
+                  <h3>Coinbase Transaction</h3>
                 </header>
-                <p>{% if tx_hashes %}{{ tx_hashes | length }}{% else %}0{% endif %}</p>
+                <p><a href="/transaction/{{ block_header.miner_tx_hash }}">{{ block_header.miner_tx_hash | truncate(length=12) }}</a></p>
               </section>
             </div>
             <div class="col-4 col-6-medium col-12-small">
               <section class="box">
                 <header>
-                  <h3>Orphaned</h3>
+                  <h3>Reward</h3>
                 </header>
-                <p>{{ block_header.orphan_status }}</p>
+                <p>{{ block_header.reward / 1000000000000 }} XMR</p>
               </section>
             </div>
             <div class="col-4 col-6-medium col-12-small">
@@ -66,29 +66,14 @@
       <br><br>
       <div class="tx-table">
       <table>
-        <caption><h2>Block Transactions</h2></caption>
+        <caption><h2>Transactions ({% if tx_hashes %}{{ tx_hashes | length - 1 }}{% else %}?{% endif %})</h2></caption>
         <tr>
-          <th>Coinbase</th>
           <th>Hash</th>
-          <th>Amount</th>
-          <th>Fee</th>
-          <th>Bytes</th>
-        </tr>
-        <tr>
-          <td>√</td>
-          <td><a href="/transaction/{{ block_header.miner_tx_hash }}">{{ block_header.miner_tx_hash | truncate(length=8) }}</a></td>
-          <td>{{ block_header.reward / 1000000000000 }} XMR</td>
-          <td>0</td>
-          <td>?</td>
         </tr>
         {% if tx_hashes %}
           {% for hash in tx_hashes %}
             <tr>
-              <td></td>
-              <td><a href="/transaction/{{ hash }}">{{ hash | truncate(length=8) }}</a></td>
-              <td>?</td>
-              <td>?</td>
-              <td>?</td>
+              <td><a href="/transaction/{{ hash }}">{{ hash | truncate(length=12) }}</a></td>
             </tr>
           {% endfor %}
         {% endif %}
