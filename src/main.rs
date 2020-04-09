@@ -88,9 +88,15 @@ fn get_block_by_height(block_height: String) -> Template {
 
 #[get("/transaction/<tx_hash>")]
 fn get_transaction_by_hash(tx_hash: String) -> Template {
-    let params: JsonValue = json!({"txs_hashes": [&tx_hash]});
-    let res: GetTransactions = issue_raw_rpc(&"get_transactions", params)
+    let params: JsonValue = json!({
+        "txs_hashes": [&tx_hash],
+        "decode_as_json": true
+    });
+    let mut res: GetTransactions = issue_raw_rpc(&"get_transactions", params)
         .send().unwrap().json().unwrap();
+    for f in &mut res.txs {
+        f.process();
+    };
     let context = json!({
         "tx_info": res.txs,
         "tx_hash": tx_hash

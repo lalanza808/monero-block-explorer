@@ -128,6 +128,14 @@ pub struct GetTransactionsTxs {
     pub double_spend_seen: bool,
     pub in_pool: bool,
     pub output_indices: Option<Vec<u32>>,
+    pub as_json: String,
+    pub as_json_full: Option<TransactionJSON>
+}
+
+impl GetTransactionsTxs {
+    pub fn process(&mut self) {
+        self.as_json_full = Some(serde_json::from_str(&self.as_json).unwrap())
+    }
 }
 
 #[derive(Serialize, Deserialize, Hash, Eq, PartialEq, Debug)]
@@ -199,19 +207,19 @@ pub struct TransactionJSON {
 
 #[derive(Serialize, Deserialize, Hash, Eq, PartialEq, Debug)]
 pub struct TransactionInputs {
-    pub key: PreviousTransactionKey
+    pub key: Option<PreviousTransactionKey>
 }
 
 #[derive(Serialize, Deserialize, Hash, Eq, PartialEq, Debug)]
 pub struct PreviousTransactionKey {
-    pub amount: u32,
+    pub amount: u64,
     pub key_offsets: Vec<u32>,
     pub k_image: String
 }
 
 #[derive(Serialize, Deserialize, Hash, Eq, PartialEq, Debug)]
 pub struct TransactionOutputs {
-    pub amount: u32,
+    pub amount: u64,
     pub target: OutputStealthAddress
 }
 
@@ -223,6 +231,6 @@ pub struct OutputStealthAddress {
 #[derive(Serialize, Deserialize, Hash, Eq, PartialEq, Debug)]
 pub struct RingSignatures {
     pub r#type: u32,
-    pub txnFee: u64,
-    pub outPk: Vec<String>
+    pub txnFee: Option<u64>,
+    pub outPk: Option<Vec<String>>
 }
