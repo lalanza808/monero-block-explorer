@@ -1,7 +1,7 @@
 [package]
 name = "monero-block-explorer"
 version = "0.1.0"
-authors = ["lalanza808 <lance@reciprocitylabs.com>"]
+authors = ["lalanza808 <lance@lzahq.tech>"]
 edition = "2018"
 description = "Simple web application for querying nodes to retrieve information about the Monero blockchain."
 
