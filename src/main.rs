@@ -7,7 +7,6 @@ extern crate qrcode_generator;
 mod data_types;
 
 use rocket::http::RawStr;
-use rocket::request::Form;
 use rocket::response::Redirect;
 use rocket_contrib::json::{Json,JsonValue};
 use rocket_contrib::templates::Template;
