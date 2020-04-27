@@ -9,3 +9,10 @@ This simple web application allows users to search, visualize (soon), and intera
 3. Pin the nightly version of rust to the local directory: `rustup override set nightly`
 4. [Pick a Monero node](https://moneroworld.com) if you don't have one and apply the `DAEMON_URI` environment variable: `export DAEMON_URI=http://node.supportxmr.com:18081`
 5. Run the application: `cargo run`
+
+## Todo
+
+* Consolidate the json rpc functions
+* Split code into multiple files
+* Add transaction decoding
+* ~~Add extra attributes for QR code generation~~
