@@ -13,23 +13,19 @@
         <div class="center">
           <img src="data:image/svg+xml;base64,{{ qr_code }}" width=200 class="center">
         </div>
-        <!-- Want to generate a QR code for incoming payment?
-        <form action="." method="get">
-          <input type="text" name="amount" placeholder="Enter amount for transaction.">
-          <input type="submit" value="Search">
-        </form> -->
+        <div class="qr_form">
+          <p>Want to generate a QR code for incoming payment?</p>
+          <form action="" method="get">
+            <input type="text" name="tx_amount" placeholder="Enter amount for transaction.">
+            <input type="text" name="tx_payment_id" placeholder="Enter a payment ID for transaction.">
+            <input type="text" name="recipient_name" placeholder="Enter the name of the recipient.">
+            <input type="text" name="tx_description" placeholder="Enter a description for the transaction.">
+            <button type="submit" value="">Regenerate QR Code</button>
+          </form>
+        </div>
       </section>
     </div>
   </div>
 </section>
-
-<!--
-https://monero.fandom.com/wiki/URI_formatting
-address 	String 	hierarch.	The raw address (or the openalias?).
-tx_payment_id 	String 	?	The proposed payment ID of the transaction.
-recipient_name 	String 	?	The proposed contact name of the recipient.
-tx_amount 	UInt64 	query 	The proposed amount of the transaction in floating point units (eg. 5.3 XMR instead of 5300000000000)
-tx_description 	String 	fragment 	Describes the transaction which should be initiated.
--->
 
 {% endblock content %}

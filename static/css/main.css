@@ -297,3 +297,13 @@ p.subheader {
   margin: 0 auto;
   display: block;
 }
+
+.qr_form form {
+  text-align: center;
+}
+
+.qr_form form input {
+  width: 75%;
+  margin: .5em auto;
+  padding-bottom: 1em;
+}

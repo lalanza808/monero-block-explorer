@@ -7,6 +7,7 @@ extern crate qrcode_generator;
 mod data_types;
 
 use rocket::http::RawStr;
+use rocket::request::Form;
 use rocket::response::Redirect;
 use rocket_contrib::json::{Json,JsonValue};
 use rocket_contrib::templates::Template;
@@ -104,9 +105,22 @@ fn get_transaction_by_hash(tx_hash: String) -> Template {
     Template::render("transaction", context)
 }
 
-#[get("/address/<wallet_address>")]
-fn show_wallet_address(wallet_address: String) -> Template {
-    let address_uri = format!("monero:{}", wallet_address);
+#[get("/address/<wallet_address>?<tx_amount>&<tx_description>&<recipient_name>&<tx_payment_id>")]
+fn show_wallet_address(
+        wallet_address: String,
+        tx_amount: Option<String>,
+        tx_description: Option<String>,
+        recipient_name: Option<String>,
+        tx_payment_id: Option<String>
+    ) -> Template {
+    let address_uri = format!(
+        "monero:{}&tx_amount={}&tx_description={}&recipient_name={}&tx_payment_id={}",
+        wallet_address,
+        tx_amount.unwrap_or("".to_string()),
+        tx_description.unwrap_or("".to_string()),
+        recipient_name.unwrap_or("".to_string()),
+        tx_payment_id.unwrap_or("".to_string())
+    );
     let qr_code: String = qrcode_generator::to_svg_to_string(address_uri, QrCodeEcc::Low, 256, None)
         .unwrap();
     let qr_code: String = base64::encode(qr_code);
@@ -164,11 +178,11 @@ fn search(value: &RawStr) -> Redirect {
     } else if sl == 95 {
         // Equal to 95 characters is probably a wallet address.
         // For this let's just redirect to the `show_wallet_address` route.
-        return Redirect::found(uri!(show_wallet_address: value.as_str()))
+        return Redirect::found(uri!(show_wallet_address: value.as_str(), "", "", "", ""))
     } else if sl == 105 {
         // Equal to 105 characters is probably an integrated address.
         // For this let's just redirect to the `show_wallet_address` route.
-        return Redirect::found(uri!(show_wallet_address: value.as_str()))
+        return Redirect::found(uri!(show_wallet_address: value.as_str(), "", "", "", ""))
     } else {
         // Anything else hasn't been implemented yet
         // so redirect to error response.
